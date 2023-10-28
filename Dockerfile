@@ -1,21 +1,13 @@
-FROM python:3-slim-buster
+FROM python:3.10.8-slim-buster
 
-RUN pip install --upgrade pip
+RUN apt update && apt upgrade -y
+RUN apt install git -y
+COPY requirements.txt /requirements.txt
 
-ENV USER botx
-ENV HOME /home/$USER
-ENV BOT $HOME/media-search-bot
-
-RUN useradd -m $USER
-RUN mkdir -p $BOT
-RUN chown $USER:$USER $BOT
-USER $USER
-WORKDIR $BOT
-
-
-COPY requirements.txt requirements.txt
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN cd /
+RUN pip3 install -U pip && pip3 install -U -r requirements.txt
+WORKDIR /Media-Search-bot 
 
 COPY . .
 
-CMD python3 bot.py
+CMD ["python3", "bot.py"]
